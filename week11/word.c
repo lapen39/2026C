@@ -19,37 +19,37 @@ int read_words(char *fname, WORDS *words[], int nword, int capacity){
 
     char buf[BUFSIZ];
     unsigned char c1;
-    unsigned char mask = 0x80; // 0x8: 1000 0000
+    unsigned char mask = 0x80; // 0x80: 1000 0000
     while (fgets(buf, BUFSIZ, fp) != NULL){
         printf("%s\n", buf);
 
         for (int i =0; i < strlen(buf); i++){
             c1 = buf[i];
-            // printf("%c\n", c1);
             if (!(c1 & mask)) continue; // c1과 mask를 AND 취한게 0이면 = 아스키면 -> 아무짓도 안 함
 
-            i++;
-
             // c1과 mask를 AND 취한게 1이면 = 한글이면
+            i++;
             unsigned char c2 = buf[i];
-            unsigned char w[3];
-            sprintf(w, "%c%c", c1, c2); // 한글은 2바이트라서 c1과 c2를 합침
+            i++;
+            unsigned char c3 = buf[i];
+            unsigned char w[4];
+            sprintf(w, "%c%c%c", c1, c2, c3); // UFT-8에서 한글은 3바이트라서 c1, c2, c3 합침
             printf("%s\n", w);
 
-            // int index = wsearch(w, words, nword, capacity);
-            // if (index < 0){ // 단어가 없으면
-            //     words[nword] = allocate_word(w);
+            int index = wsearch(w, words, nword, capacity);
+            if (index < 0){ // 단어가 없으면
+                words[nword] = allocate_word(w);
 
-            //     nword++;
-            // } else{ // 단어가 있으면
-            //     words[nword]->freq += 1;
-            // }
+                nword++;
+            } else{ // 단어가 있으면
+                words[nword]->freq += 1;
+            }
         }
     }
 
     fclose(fp);
 
-    // return nword;
+    return nword;
 }
 
 int wsearch(unsigned char w[], WORDS *words[], int nword, int capacity){

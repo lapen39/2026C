@@ -25,6 +25,8 @@ int main(int argc, char* argv[]){
         nwords = read_words(argv[i], words, nwords, SIZE); // SIZE: 맥시멈크기, nwords: 현재 읽은 단어 수 => 함수가 호출되면서 nwords가
     }
 
+    // printf("%d\n", nwords);
+
     // printf("%d\n", argc);
     // for (int i = 0; i < argc; i++){
     //     printf("%s\n", argv[i]);
