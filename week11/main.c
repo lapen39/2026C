@@ -20,17 +20,25 @@ int main(int argc, char* argv[]){
     }
 
     WORDS *words[SIZE];
-    int nwords = 0;
-    for (int i = 0; i < argc; i++){
-        nwords = read_words(argv[i], words, nwords, SIZE); // SIZE: 맥시멈크기, nwords: 현재 읽은 단어 수 => 함수가 호출되면서 nwords가
+    int count = 0;
+    for (int i = 1; i < argc; i++){
+        count = read_words(argv[i], words, count, SIZE); // SIZE: 맥시멈크기, count: 현재 읽은 단어 수 => 함수가 호출되면서 count가 갱신됨
     }
+    // printf("%d\n",count);
+    // print_words(words, count);
 
-    // printf("%d\n", nwords);
+    qsort(words, count, sizeof(WORDS *), compare_by_han);
+    print_words(words, count);
 
-    // printf("%d\n", argc);
-    // for (int i = 0; i < argc; i++){
-    //     printf("%s\n", argv[i]);
-    // }
+    char w[4];
+    while (1){
+        printf("한글 입력 > ");
+        scanf("%s", w);
+
+        WORDS *found = find_word(words, count, w);
+        if (found) printf("%s: %d\n", found->word, found->freq);
+        else printf("not found\n");
+    }
 
     return 0;
 }
